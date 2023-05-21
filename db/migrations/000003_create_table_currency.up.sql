@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS currency (
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    country VARCHAR NOT NULL,
+    currency VARCHAR NOT NULL,
+    currency_abb VARCHAR(3) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ
+);
