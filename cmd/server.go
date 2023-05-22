@@ -37,24 +37,29 @@ func (s *Server) setupRouter() {
 		middleware.RecoveryMiddleware(),
 	)
 
-	// tokenService := service.NewGenerateToken(
-	// 	s.cfg.AccessTokenKey,
-	// 	s.cfg.RefreshTokenKey,
-	// 	s.cfg.AccessTokenDuration,
-	// 	s.cfg.RefreshTokenDuration,
-	// )
+	tokenService := service.NewGenerateToken(
+		s.cfg.AccessTokenKey,
+		s.cfg.RefreshTokenKey,
+		s.cfg.AccessTokenDuration,
+		s.cfg.RefreshTokenDuration,
+	)
 
 	userRepo := repository.NewUserRepo(DBConn)
 	userService := service.NewUserService(userRepo)
 	userController := controller.NewUserController(userService)
+
+	authRepo := repository.NewAuthRepo(DBConn)
+	sessionService := service.NewSessionService(userRepo, authRepo, tokenService)
+	sessionController := controller.NewSessionController(sessionService, tokenService)
 
 	currencyRepo := repository.NewCurrencyRepo(DBConn)
 	currencyService := service.NewCurrencyService(currencyRepo)
 	currencyController := controller.NewCurrencyController(currencyService)
 
 	r.POST("/users", userController.Create)
+	r.POST("/login", sessionController.Login)
 
-	// r.Use(middleware.AuthMiddleware(tokenService))
+	r.Use(middleware.AuthMiddleware(tokenService))
 
 	r.GET("/users", userController.GetLists)
 
