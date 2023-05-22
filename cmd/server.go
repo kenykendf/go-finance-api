@@ -63,8 +63,11 @@ func (s *Server) setupRouter() {
 
 	r.GET("/users", userController.GetLists)
 
-	r.POST("/currency", currencyController.Create)
+	r.POST("/currency", currencyController.CreateCurrency)
 	r.GET("/currencies", currencyController.GetCurrenciesLists)
+	r.GET("/currency/:id", currencyController.GetCurrencyByID)
+	r.PUT("/currency/:id", currencyController.UpdateCurrency)
+	r.DELETE("/currency/:id", currencyController.DeleteCurrency)
 
 	s.router = r
 }
