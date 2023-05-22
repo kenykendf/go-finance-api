@@ -72,7 +72,7 @@ func (ur *UserRepo) GetUserByEmail(email string) (model.User, error) {
 	var (
 		user         model.User
 		sqlStatement = `
-			SELECT id, username, email, fullname
+			SELECT id, username, email, fullname, password
 			FROM users
 			WHERE email = $1
 		`

@@ -53,12 +53,14 @@ func (ss *SessionService) Login(req *schema.LoginReq) (schema.LoginResp, error) 
 	// find existing user by userID
 	existingUser, _ := ss.userRepo.GetUserByEmail(req.Email)
 	if existingUser.ID <= 0 {
+		log.Error("unable to get user by email")
 		return resp, errors.New("reason.FailedLogin")
 	}
 
 	// verify password
 	isVerified := ss.verifyPassword(existingUser.Password, req.Password)
 	if !isVerified {
+		log.Error("invalid password")
 		return resp, errors.New("reason.FailedLogin")
 	}
 
