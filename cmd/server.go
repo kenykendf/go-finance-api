@@ -56,6 +56,10 @@ func (s *Server) setupRouter() {
 	currencyService := service.NewCurrencyService(currencyRepo)
 	currencyController := controller.NewCurrencyController(currencyService)
 
+	categoryRepo := repository.NewCategoryRepo(DBConn)
+	categoryService := service.NewCategoryService(categoryRepo)
+	categoryController := controller.NewCategoryController(categoryService)
+
 	r.POST("/users", userController.Create)
 	r.POST("/login", sessionController.Login)
 
@@ -68,6 +72,12 @@ func (s *Server) setupRouter() {
 	r.GET("/currency/:id", currencyController.GetCurrencyByID)
 	r.PUT("/currency/:id", currencyController.UpdateCurrency)
 	r.DELETE("/currency/:id", currencyController.DeleteCurrency)
+
+	r.POST("/category", categoryController.CreateCategory)
+	r.GET("/categories", categoryController.GetCategoriesLists)
+	r.GET("/category/:id", categoryController.GetCategoryByID)
+	r.PUT("/category/:id", categoryController.UpdateCategory)
+	r.DELETE("/category/:id", categoryController.DeleteCategory)
 
 	s.router = r
 }
