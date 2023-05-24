@@ -60,6 +60,10 @@ func (s *Server) setupRouter() {
 	categoryService := service.NewCategoryService(categoryRepo)
 	categoryController := controller.NewCategoryController(categoryService)
 
+	typeTransactionRepo := repository.NewTypeTransactionRepo(DBConn)
+	typeTransactionService := service.NewTypeTransactionService(typeTransactionRepo)
+	typeTransactionController := controller.NewTypeTransactionController(typeTransactionService)
+
 	r.POST("/users", userController.Create)
 	r.POST("/login", sessionController.Login)
 
@@ -78,6 +82,12 @@ func (s *Server) setupRouter() {
 	r.GET("/category/:id", categoryController.GetCategoryByID)
 	r.PUT("/category/:id", categoryController.UpdateCategory)
 	r.DELETE("/category/:id", categoryController.DeleteCategory)
+
+	r.POST("/type_transaction", typeTransactionController.CreateTypeTransaction)
+	r.GET("/type_transactions", typeTransactionController.GetTypeTransactionsLists)
+	r.GET("/type_transaction/:id", typeTransactionController.GetTypeTransactionByID)
+	r.PUT("/type_transaction/:id", typeTransactionController.UpdateTypeTransaction)
+	r.DELETE("/type_transaction/:id", typeTransactionController.DeleteTypeTransacton)
 
 	s.router = r
 }
